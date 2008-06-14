@@ -1,0 +1,65 @@
+	>> require 'doctest_helper'
+
+## Slipcover ##
+
+- treat a series of URI-accessing agents as a cluster by:
+ - systematically sending the same query to all of them in parallel
+ - zipping up the results
+
+# Example: access a cluster of CouchDB databases accessed via CouchRest (http://github.com/jchris/couchrest/tree/master)
+
+Require CouchRest and Slipcover:
+
+	>> require 'slipcover'
+	>> require 'couchrest'
+
+Create the members of the cluster (these could be on different hosts, but we'll just simulate that here):
+  	 
+	>> db1 = CouchRest.new('localhost:5984').database('grabbit-import')
+	>> db2 = CouchRest.new('127.0.0.1:5984').database('test_suite_db')
+
+Assign them to Slipcover for management:
+        
+	>> cluster = Slipcover.new( [db1, db2] ) 
+
+By default, our cluster will re-raise any errors that occur in individual members
+	
+	>> lambda{ cluster.get( "00485b412155c325a3e6982470931ccd" )}.raises_error? RestClient::Request::RequestFailed
+	=> true
+
+but, if we want to ignore certain errors in the members (like in this case where we only want to hear back from the member of the cluster that actually has the document we're looking for), we can tell Slipcover to silence errors of a certain type
+
+	>> cluster.silenced_errors << RestClient::Request::RequestFailed	
+	=> [RestClient::Request::RequestFailed]
+
+and then getting a document that's present on only one of the members will return the document without any noise from the other cluster members:
+
+	>> result = cluster.get( "00485b412155c325a3e6982470931ccd" )
+	>> result.first["metadata"].first["artist"]
+	=> "All My Friends" 
+
+If members raise other errors that aren't included in the list to be silenced, however, they will bring things to a halt. For example, if we add another member to the cluster on a broken connection
+
+	>> db3 = CouchRest.new('broken-socket').database('grabbit-import')
+	>> cluster.add_member db3
+
+then the resulting errors will still raise:
+
+	>> lambda{ cluster.get( "00485b412155c325a3e6982470931ccd" )}.raises_error? SocketError
+	=> true
+
+Let's remove this broken cluster member so we can continue our tests:
+
+	>> cluster.remove_member{ |m| m.host == 'broken-socket' }
+	>> cluster.members.length == 2
+	=> true
+
+We could also remove a particular member if we had it handy
+
+	>> cluster.add_member db3
+	>> cluster.remove_member db3
+	>> cluster.members.length == 2
+	=> true
+
+
+# Example: 
