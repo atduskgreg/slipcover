@@ -2,8 +2,8 @@
 
 ## Slipcover ##
 
-- treat a series of URI-accessing agents as a cluster by:
- - systematically sending the same query to all of them in parallel
+- treat a series of objects as a cluster by:
+ - systematically calling the same method on all of them in parallel
  - zipping up the results
 
 # Example: access a cluster of CouchDB databases accessed via CouchRest (http://github.com/jchris/couchrest/tree/master)
