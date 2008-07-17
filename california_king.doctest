@@ -1,0 +1,32 @@
+	>> require 'doctest_helper'
+
+## CalforniaKing ##
+
+- named after the hugest mattress you can get.
+  - furnish the king with an array of queries, and it will excute them across a series of threads (because Erlang/CouchDB eats up concurrency like a king)
+  - using CaliforniaKing you can usually get done in seconds what might take minutes, without threading.
+  
+# Example: run a collection of queries in parallel against a single db.
+
+Require CouchRest and CalforniaKing:
+
+	>> require 'california_king'
+	>> cr = CouchRest.new('localhost:5984')
+	>> begin; cr.database('california_king-test').delete!; rescue RestClient::Request::RequestFailed; nil; end
+	>> db = cr.create_db('california_king-test')
+	
+Create a bunch of docs:
+
+  >> docs = []
+  >> 400.times{|n|docs.push({:number => n})}
+  >> saved = db.bulk_save(docs)
+  >> saved['new_revs'].length
+  => 400
+  
+Retrieve them using 10 threads:
+
+  >> queries =  saved['new_revs'].collect{|r|[:get, r['id']]}
+  >> king = CaliforniaKing.new('localhost:5984','california_king-test', 10)
+  >> results = king.query queries
+  >> results.collect{|doc|doc['number']}.uniq.length
+  => 400
