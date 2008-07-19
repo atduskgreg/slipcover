@@ -2,8 +2,10 @@
 
 ## CalforniaKing ##
 
+
 - named after the hugest mattress you can get.
-  - furnish the king with an array of queries, and it will excute them across a series of threads (because Erlang/CouchDB eats up concurrency like a king)
+  - where Slipcover lets you run a single query against a cluster, CaliforniaKing runs multiple simultaneous queries against a single CouchDb
+  - furnish the king with an array of queries, and it will execute them across a series of threads (because Erlang/CouchDB eats up concurrency like a king)
   - using CaliforniaKing you can usually get done in seconds what might take minutes, without threading.
   
 # Example: run a collection of queries in parallel against a single db.
