@@ -1,4 +1,14 @@
-Checkout slipcover.doctest for usage and explanation.
+Two simple scripts for helping with CouchDB clustering and parallelization:
+
+=Slipcover
+
+- run a single query across a multi-member cluser (i.e. a group of CouchDBs) and zip up the results
+
+=California King
+
+- run a series of queries in parallel against a single CouchDB
+
+Checkout slipcover.doctest and california_king.doctest for usage and explanation.
 
 To run the doctests:
 
