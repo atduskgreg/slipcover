@@ -8,6 +8,8 @@ Two simple scripts for helping with CouchDB clustering and parallelization:
 
 - run a series of queries in parallel against a single CouchDB
 
+=Details
+
 Checkout slipcover.doctest and california_king.doctest for usage and explanation.
 
 To run the doctests:
