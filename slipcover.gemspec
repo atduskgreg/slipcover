@@ -9,11 +9,11 @@ Gem::Specification.new do |s|
   s.has_rdoc = false
   s.authors = ["Greg Borenstein", "J. Chris Anderson"]
   s.files = %w{
-    slipcover.rb california_king.rb
+    lib/slipcover.rb lib/california_king.rb
     README.rdoc 
     slipcover.gemspec
-    slipcover.doctest california_king.doctest
+    doctest/slipcover.doctest doctest/california_king.doctest doctest/doctest_helper.rb
     }
-  # s.require_path = ""
+  s.require_path = "lib"
   s.add_dependency("couchrest", [">= 0.9"])
 end
