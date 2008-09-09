@@ -14,6 +14,6 @@ Checkout slipcover.doctest and california_king.doctest for usage and explanation
 
 To run the doctests:
 
-gem install rubydoctest
-cd slipcover
-rubydoctest *.doctest
+    gem install rubydoctest
+    cd slipcover
+    rubydoctest *.doctest
