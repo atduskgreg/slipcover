@@ -1,6 +1,7 @@
 require 'rubygems'
-require 'activesupport'
+require 'enumerator'
 require 'couchrest'
+
 class CaliforniaKing
   attr_accessor :silenced_errors, :width
   

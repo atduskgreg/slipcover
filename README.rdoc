@@ -16,4 +16,4 @@ To run the doctests:
 
 gem install rubydoctest
 cd slipcover
-rubydoctest .
+rubydoctest *.doctest

@@ -10,11 +10,11 @@
   
 # Example: run a collection of queries in parallel against a single db.
 
-Require CouchRest and CalforniaKing:
+Require CalforniaKing:
 
 	>> require 'california_king'
 	>> cr = CouchRest.new('localhost:5984')
-	>> begin; cr.database('california_king-test').delete!; rescue RestClient::Request::RequestFailed; nil; end
+	>> cr.database('california_king-test').delete! rescue nil
 	>> db = cr.create_db('california_king-test')
 	
 Create a bunch of docs:

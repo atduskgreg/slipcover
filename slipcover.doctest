@@ -8,22 +8,21 @@
 
 # Example: access a cluster of CouchDB databases accessed via CouchRest (http://github.com/jchris/couchrest/tree/master)
 
-Require CouchRest and Slipcover:
+Require Slipcover:
 
 	>> require 'slipcover'
-	>> require 'couchrest'
 
 Create the members of the cluster (these could be on different hosts, but we'll just simulate that here):
   	 
 	>> cr1 = CouchRest.new('localhost:5984')
-	>> cr1.database('slipcover-test').delete!
-	>> begin; cr1.create_db('slipcover-test'); rescue; nil; end;
+	>> cr1.database('slipcover-test').delete! rescue nil
+	>> cr1.create_db('slipcover-test')
 
 Create cluster member two.
 	
 	>> cr2 = CouchRest.new('127.0.0.1:5984')
-	>> cr2.database('slipcover-test2').delete!
-	>> begin; cr2.create_db('slipcover-test2'); rescue; nil; end;
+	>> cr2.database('slipcover-test2').delete! rescue nil
+	>> cr2.create_db('slipcover-test2') 
 	>> db1 = cr1.database('slipcover-test')
 	>> db2 = cr2.database('slipcover-test2')
 	>> saved = db1.save({"test"=>"doc"})
@@ -36,13 +35,13 @@ Assign them to Slipcover for management:
 
 By default, our cluster will re-raise any errors that occur in individual members
 	
-	>> lambda{ cluster.get( saved['id'] )}.raises_error? RestClient::Request::RequestFailed
+	>> lambda{ cluster.get( saved['id'] )}.raises_error? RestClient::ResourceNotFound
 	=> true
 
 but, if we want to ignore certain errors in the members (like in this case where we only want to hear back from the member of the cluster that actually has the document we're looking for), we can tell Slipcover to silence errors of a certain type
 
-	>> cluster.silenced_errors << RestClient::Request::RequestFailed	
-	=> [RestClient::Request::RequestFailed]
+	>> cluster.silenced_errors << RestClient::ResourceNotFound	
+	=> [RestClient::ResourceNotFound]
 
 and then getting a document that's present on only one of the members will return the document without any noise from the other cluster members:
   
@@ -57,7 +56,7 @@ If members raise other errors that aren't included in the list to be silenced, h
 
 then the resulting errors will still raise:
 
-	>> lambda{ cluster.get( saved['id'] )}.raises_error? SocketError
+	>> lambda{ cluster.get( saved['id'] )}.raises_error? Object
 	=> true
 
 Let's remove this broken cluster member so we can continue our tests:
@@ -73,5 +72,3 @@ We could also remove a particular member if we had it handy
 	>> cluster.members.length == 2
 	=> true
 
-
-# Example: 
