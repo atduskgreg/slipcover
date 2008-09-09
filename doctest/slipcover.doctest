@@ -1,3 +1,4 @@
+  >> $:.unshift File.dirname(__FILE__)
 	>> require 'doctest_helper'
 
 ## Slipcover ##
@@ -8,9 +9,10 @@
 
 # Example: access a cluster of CouchDB databases accessed via CouchRest (http://github.com/jchris/couchrest/tree/master)
 
-Require Slipcover:
+Require Slipcover and CouchRest:
 
-	>> require 'slipcover'
+	>> require 'lib/slipcover'
+	>> require 'couchrest'
 
 Create the members of the cluster (these could be on different hosts, but we'll just simulate that here):
   	 

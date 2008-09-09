@@ -1,3 +1,4 @@
+  >> $:.unshift File.dirname(__FILE__)
 	>> require 'doctest_helper'
 
 ## CalforniaKing ##
@@ -12,11 +13,11 @@
 
 Require CalforniaKing:
 
-	>> require 'california_king'
+	>> require 'lib/california_king'
 	>> cr = CouchRest.new('localhost:5984')
 	>> cr.database('california_king-test').delete! rescue nil
 	>> db = cr.create_db('california_king-test')
-	
+
 Create a bunch of docs:
 
   >> docs = []

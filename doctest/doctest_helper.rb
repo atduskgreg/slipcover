@@ -1,3 +1,5 @@
+$:.unshift File.dirname(__FILE__) + "/.."
+
 class Proc
   def raises_error?(err)
     begin
