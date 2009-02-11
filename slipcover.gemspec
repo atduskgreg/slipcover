@@ -1,4 +1,5 @@
 Gem::Specification.new do |s|
+
   s.name = "slipcover"
   s.version = "0.2.0"
   s.date = "2008-09-09"
